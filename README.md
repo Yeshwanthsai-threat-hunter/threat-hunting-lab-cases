@@ -16,20 +16,5 @@ indicators identified, findings, and defensive detection opportunities.
 - IOC Investigation
 - Process Correlation
 - MITRE ATT&CK
-- KQL-Based Detection & Hunting
 
-## Case Studies
 
-### Case 01 – Windows Logon Activity & PowerShell Investigation
-
-Investigation of Windows logon-related activity followed by PowerShell
-process execution, encoded commands, command decoding, IOC identification,
-and follow-on activity analysis.
-
-**Key investigation steps:**
-
-`Logon → PowerShell → Task ID 106 → Encoded Command → Decode → IOC Search → Findings`
-
-**Dataset:** OTRF Security-Datasets
-
-**Status:** Completed
