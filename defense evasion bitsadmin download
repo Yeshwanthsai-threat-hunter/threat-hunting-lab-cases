@@ -1,0 +1,107 @@
+Defense Evasion – BITSAdmin Download Investigation
+1. Case Overview
+
+Category: Defense Evasion
+MITRE ATT&CK Technique: T1197 – BITS Jobs
+Technique: BITSAdmin Download
+Investigation Focus: Identification and analysis of BITSAdmin activity used to download and execute a file.
+
+2. Investigation Objective
+
+The objective of this investigation was to identify suspicious use of BITSAdmin for file transfer and determine whether any additional malicious activity occurred after the downloaded file was executed.
+
+3. Investigation Methodology
+
+Since the case was associated with BITSAdmin, the investigation was initiated by searching the available logs for the keyword:
+
+bitsadmin
+
+The investigation focused on identifying:
+
+BITSAdmin execution.
+Files downloaded using BITSAdmin.
+The name and destination of the downloaded file.
+Subsequent execution of the downloaded file.
+Any additional activity following execution.
+4. Investigation Findings
+
+The investigation identified activity involving bitsadmin.exe.
+
+BITSAdmin was observed downloading a file named:
+
+T1197.md
+
+The downloaded file was subsequently renamed to:
+
+bitsadmin1_flag.ps1
+
+The .ps1 extension indicates that the file was treated as a PowerShell script.
+
+A subsequent search was performed for:
+
+bitsadmin1_flag.ps1
+
+This search was conducted to determine whether there was additional execution or related activity after the file was downloaded.
+
+No further activity associated with bitsadmin1_flag.ps1 was observed in the available telemetry.
+
+5. Attack Flow
+
+The observed activity can be summarized as:
+
+BITSAdmin (bitsadmin.exe)
+↓
+Downloads T1197.md
+↓
+File renamed to bitsadmin1_flag.ps1
+↓
+PowerShell script executed
+↓
+No further related activity observed
+
+6. MITRE ATT&CK Mapping
+MITRE ATT&CK	Technique	Observed Activity
+T1197	BITS Jobs	bitsadmin.exe was used to download a file
+T1059.001	PowerShell	The downloaded file was identified as a .ps1 script and executed
+
+Note: The T1059.001 mapping should be retained only if the available logs provide evidence that PowerShell actually executed bitsadmin1_flag.ps1. The filename extension alone does not prove execution by PowerShell.
+
+7. Evidence
+
+The following screenshots should be attached to the report as supporting evidence:
+
+Evidence 1 – BITSAdmin Activity
+
+Screenshot showing the execution/activity involving:
+
+bitsadmin.exe
+
+Evidence 2 – Downloaded File
+
+Screenshot showing:
+
+T1197.md
+
+and its subsequent naming as:
+
+bitsadmin1_flag.ps1
+
+Evidence 3 – Follow-up Search
+
+Screenshot showing the search for:
+
+bitsadmin1_flag.ps1
+
+and demonstrating that no additional related activity was identified.
+
+8. Overall Activity
+
+The investigation established that BITSAdmin was used to download T1197.md, which was subsequently renamed to bitsadmin1_flag.ps1 and executed. No further related activity was observed in the available logs after execution.
+
+9. Conclusion
+
+The observed behavior is consistent with the use of BITS Jobs (MITRE ATT&CK T1197) as a file-transfer mechanism.
+
+The investigation identified the download and subsequent execution of the renamed PowerShell script but did not identify additional related activity in the available telemetry.
+
+Further investigation would require additional endpoint, PowerShell, process, network, and file-system telemetry to determine whether the script performed any activity that was not captured by the available logs.
