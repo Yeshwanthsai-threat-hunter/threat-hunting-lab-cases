@@ -1,0 +1,118 @@
+Defense Evasion – Disabling Windows Event Log Service
+1. Case Overview
+
+Case Name: Defense Evasion by Disabling Event Log Service
+Category: Defense Evasion
+MITRE ATT&CK Technique: T1562.001 – Impair Defenses: Disable or Modify Tools
+Target: Windows Event Log Service
+
+2. Investigation Objective
+
+The objective of this investigation was to identify activity related to disabling a Windows service and determine whether the Windows Event Log service was targeted.
+
+3. Investigation
+
+Since the case was related to disabling a service, the investigation was started by searching the logs using the keyword:
+
+disable
+
+Evidence – Search for "disable"
+
+Insert Screenshot Here
+
+The search results were reviewed for activity involving service configuration changes.
+
+A subsequent search was performed using the keyword:
+
+eventlog
+
+Evidence – Search for "eventlog"
+
+
+The investigation identified a Registry modification associated with the Windows Event Log service.
+
+4. Registry Command Identified
+
+The following command was observed:
+
+REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog /t REG_DWORD /v Start /d 4
+
+This command uses the Windows REG utility to modify a Registry value.
+
+Command Breakdown
+Parameter	Description
+REG ADD	Adds or modifies a Registry value
+HKEY_LOCAL_MACHINE	System-wide Windows Registry hive
+SYSTEM\CurrentControlSet\Services\EventLog	Registry path for the Event Log service
+/t REG_DWORD	Specifies the Registry value type
+/v Start	Specifies the Start value
+/d 4	Sets the value to 4
+5. Finding
+
+The command modifies the Start Registry value associated with the Windows Event Log service.
+
+The value was changed to:
+
+Start = 4
+
+A Windows service Start value of 4 represents a Disabled startup configuration.
+
+Therefore, the command was used to configure the Windows Event Log service as disabled.
+
+Evidence – Registry Modification
+
+
+6. Attack Flow
+Service Disable Activity
+          ↓
+Search for "disable"
+          ↓
+Event Log Service Identified
+          ↓
+REG ADD Command Observed
+          ↓
+Start Value Changed to 4
+          ↓
+Event Log Service Configured as Disabled
+7. Security Impact
+
+The Windows Event Log service is responsible for collecting and managing Windows event logs.
+
+Disabling this service can reduce the availability of security and system telemetry. This may impair monitoring and make investigation of subsequent activity more difficult.
+
+The behavior is therefore relevant from a Defense Evasion perspective.
+
+8. MITRE ATT&CK Mapping
+T1562.001 – Impair Defenses: Disable or Modify Tools
+
+Observed behavior:
+A Registry modification was used to set the Windows Event Log service's Start value to 4, configuring the service as disabled.
+
+Purpose/Impact:
+This can impair security logging and reduce defensive visibility on the affected system.
+
+9. Evidence Summary
+Evidence	Observation
+Screenshot 1	Search for disable
+Screenshot 2	Search for eventlog
+Screenshot 3	REG ADD command modifying Event Log service
+Registry Value	Start = 4
+Target Service	Windows Event Log
+ATT&CK Technique	T1562.001
+10. Overall Activity
+
+The REG utility was used to modify the Registry configuration of the Windows Event Log service. The Start value was set to 4, which configures the service as disabled.
+
+This activity is consistent with Defense Evasion – T1562.001 (Impair Defenses: Disable or Modify Tools) because disabling the Event Log service can impair logging and security monitoring.
+
+11. Conclusion
+
+The investigation identified an attempt to disable the Windows Event Log service through a Registry modification.
+
+The command:
+
+REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog /t REG_DWORD /v Start /d 4
+
+changed the service's Start configuration to 4 (Disabled).
+
+The activity represents a security-relevant modification that can reduce Windows logging and defensive visibility and is mapped to MITRE ATT&CK T1562.001 – Impair Defenses: Disable or Modify Tools.
