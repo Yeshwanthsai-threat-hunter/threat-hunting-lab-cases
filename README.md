@@ -17,4 +17,4 @@ indicators identified, findings, and defensive detection opportunities.
 - Process Correlation
 - MITRE ATT&CK
 
-
+source for cases is https://github.com/OTRF/Security-Datasets/tree/master/datasets/atomic
