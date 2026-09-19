@@ -1,0 +1,91 @@
+Defense Evasion – Firewall Rule / Port Opening Investigation Report
+1. Investigation Objective
+
+The objective of this investigation is to analyze activity associated with Defense Evasion through opening an inbound network port and determine how the firewall configuration was modified.
+
+2. Investigation Approach
+
+Since the case is related to opening a firewall port, the investigation was started by searching for the keyword allow in the relevant security logs.
+
+The investigation focused on identifying:
+
+Firewall rule creation
+Inbound port access
+Registry modifications related to firewall rules
+Firewall rule deletion
+The commands responsible for these activities
+3. Firewall Rule Creation
+
+The investigation identified a netsh command used to create a firewall rule.
+
+The command created a rule named atomic testing and allowed inbound traffic on port 450.
+
+Finding:
+
+Tool/utility: netsh
+Activity: Firewall rule creation
+Direction: Inbound
+Port: 450
+Rule name: atomic testing
+Purpose: Allow inbound network traffic through the specified port
+
+This activity can be associated with Defense Evasion, because modifying firewall rules can allow unauthorized network communication or provide an attacker with a communication path.
+
+
+
+
+4. Registry Modification
+
+Following the firewall rule creation, registry modifications associated with the Windows Firewall configuration were observed.
+
+These registry changes indicate that the firewall rule configuration was written or modified at the system level.
+
+Finding:
+
+The registry modification corresponds to the firewall rule created through the netsh command, providing additional evidence that the firewall configuration was changed.
+
+
+
+
+5. Firewall Rule Deletion
+
+The investigation subsequently identified another netsh command that deleted the same atomic testing firewall rule.
+
+This indicates that the firewall modification was temporary rather than a persistent configuration change.
+
+Finding:
+
+Rule created: atomic testing
+Action: Allow inbound traffic on port 450
+Subsequent action: Rule deleted
+Utility involved: netsh
+
+Evidence:
+Insert screenshot showing deletion of the atomic testing firewall rule.
+
+6. Overall Activity
+
+The investigation identified a sequence of firewall configuration changes:
+
+Create firewall rule → Allow inbound port 450 → Registry modification → Delete firewall rule
+
+The netsh utility was used to create and subsequently remove the firewall rule. The associated registry modification provides evidence that the Windows Firewall configuration was changed during the activity.
+
+7. MITRE ATT&CK Mapping
+
+Tactic: Defense Evasion
+
+Relevant Technique:
+T1562.004 – Impair Defenses: Disable or Modify System Firewall
+
+The activity is relevant to this technique because the firewall configuration was modified to permit inbound network traffic through port 450.
+
+8. Investigation Conclusion
+
+The observed activity demonstrates that a firewall rule named atomic testing was created using netsh to allow inbound traffic on port 450. A corresponding registry modification was observed, confirming changes to the firewall configuration. The same rule was later deleted using netsh.
+
+The complete sequence indicates a temporary firewall configuration change, potentially allowing network communication during the activity before the rule was removed.
+
+Final Activity Summary:
+
+netsh was used to create a firewall rule named atomic testing, allowing inbound traffic on port 450. Registry modifications related to the firewall configuration were subsequently observed, and the same firewall rule was later deleted. The activity is associated with Defense Evasion through modification of the system firewall configuration.
