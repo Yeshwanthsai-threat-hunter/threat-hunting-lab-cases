@@ -1,0 +1,44 @@
+Discovery – Covenant Domain Group LDAP Search Request
+Initial Investigation
+
+Since the case is related to LDAP, start the investigation by searching for the LDAP keyword.
+
+Image
+
+Process Investigation
+
+The investigation shows that the activity was initiated by the executable GruntHTTP.exe.
+
+The LDAP discovery activity targeted the domain theshire.local.
+
+Image
+
+Network Investigation
+
+The Windows Filtering Platform recorded and permitted an outbound connection from GruntHTTP.exe.
+
+The observed network details are:
+
+Process ID:          3112
+Application Name:   \device\harddiskvolume2\users\pgustavo\desktop\grunthttp.exe
+
+Direction:           Outbound
+Source Address:      172.18.39.5
+Source Port:         62322
+
+Destination Address: 172.18.38.5
+Destination Port:    389
+
+Port 389 is commonly used for LDAP communication.
+
+The source and destination IP addresses are within the same 172.18.x.x private network, indicating communication between systems in the same internal network range.
+
+The username associated with the activity is pgustavo.
+
+Image
+
+Overall Activity
+
+The activity is associated with GruntHTTP.exe, which performed an LDAP-based discovery request to collect information related to the theshire.local domain environment.
+
+The connection was made from 172.18.39.5 to 172.18.38.5 over TCP port 389, which is used for LDAP communication. This activity can allow an attacker to gather information about the domain environment and related directory services.
