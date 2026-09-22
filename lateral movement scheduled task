@@ -1,0 +1,156 @@
+Lateral Movement – Scheduled Task Investigation Report
+1. Investigation
+
+Since the case was related to Scheduled Task activity, the investigation was started by searching for the keyword:
+
+Scheduled Task
+
+[Screenshot – Scheduled Task keyword search]
+
+The search identified scheduled-task activity involving cmd.exe and notepad.exe.
+
+2. Scheduled Task Creation
+
+A scheduled task was observed that was created to execute cmd.exe, which subsequently executes notepad.exe.
+
+The observed process command line was:
+
+C:\Windows\system32\cmd.exe /C schtasks /create /F /tn \Microsoft\Windows\SoftwareProtectionPlatform\EventCacheManager /tr "C:\Windows\system32\cmd.exe /C C:\Windows\System32\notepad.exe" /sc ONSTART /ru system /S
+
+[Screenshot – Scheduled Task creation and process command line]
+
+The scheduled task was created with the following configuration:
+
+Task Name: Microsoft\Windows\SoftwareProtectionPlatform\EventCacheManager
+Execution: cmd.exe
+Child Process: notepad.exe
+Schedule: ONSTART
+Run As: SYSTEM
+Parameter: /S
+
+The /sc ONSTART parameter configures the task to execute when the system starts.
+
+The /ru system parameter configures the task to run under the SYSTEM account.
+
+The /S parameter is relevant when investigating scheduled-task operations involving a specified system.
+
+3. Event Message Investigation
+
+The related event messages were searched to understand the activity surrounding the scheduled task.
+
+
+The investigation identified an event indicating that a handle was accessed and duplicated.
+
+
+A separate event indicated that a network connection occurred.
+
+
+Additional activity showed that libraries were loaded.
+
+
+These events were reviewed to understand the process and system activity associated with the scheduled task.
+
+4. Object Investigation
+
+The objects associated with the observed events were investigated individually.
+
+sysmondrv
+
+An object associated with the sysmondrv service was observed.
+
+
+LSA
+
+An object associated with lsa was observed.
+
+
+TCP/IP
+
+An object associated with the tcpip service was observed.
+
+
+These objects provided additional context about the system and process activity observed during the investigation.
+
+5. Network Connection Analysis
+
+The network connection event was investigated to identify the communicating systems.
+
+Source IP: 172.16.39.5
+
+Destination IP: 172.16.39.6
+
+Destination Ports: 135, 49671
+
+
+Port 135 is associated with the Microsoft RPC Endpoint Mapper.
+
+Port 49671 is a high-numbered port that may be used for dynamic RPC communication.
+
+The observed connection shows communication between:
+
+172.16.39.5 → 172.16.39.6
+
+The communication between the two systems was investigated in the context of the scheduled-task activity.
+
+6. Correlation of Observed Activity
+
+The investigation produced the following sequence of observations:
+
+Scheduled Task keyword search
+            ↓
+Scheduled task creation
+            ↓
+cmd.exe execution
+            ↓
+notepad.exe execution
+            ↓
+Task configured to run as SYSTEM
+            ↓
+Handle duplication observed
+            ↓
+Library loading observed
+            ↓
+Network connection observed
+            ↓
+172.16.39.5 → 172.16.39.6
+            ↓
+RPC-related ports 135 / 49671
+
+The combination of scheduled-task activity and communication between two systems provides additional context for investigating possible remote execution.
+
+7. MITRE ATT&CK Relevance
+
+The observed behavior is relevant to:
+
+T1053 – Scheduled Task/Job
+
+Scheduled Tasks can be used for execution, persistence, and in certain scenarios remote execution.
+
+The observed communication between two systems also makes the activity relevant for investigation of potential lateral movement.
+
+
+8. Overall Activity
+
+The scheduled task was created to execute cmd.exe, which subsequently executed notepad.exe. The task was configured to run under the SYSTEM account and execute at system startup.
+
+Additionally, a network connection was observed between the source and destination systems.
+
+The observed communication was:
+
+Source: 172.16.39.5
+Destination: 172.16.39.6
+Ports: 135 and 49671
+
+Port 135 is associated with Remote Procedure Call (RPC), while port 49671 is a high-numbered port that may be used for dynamic RPC communication.
+
+The combination of the scheduled-task activity, SYSTEM-level execution, /S parameter, and communication between the two systems provides evidence relevant to investigating possible lateral movement.
+
+9. Conclusion
+
+The investigation identified a scheduled task configured to execute cmd.exe, which subsequently executed notepad.exe under the SYSTEM account.
+
+Additional events showed handle duplication, library loading, and network communication between 172.16.39.5 and 172.16.39.6 over ports 135 and 49671.
+
+Based on the correlation of the scheduled-task activity and network communication between the two systems, the activity indicates possible lateral movement using Scheduled Task/Job.
+
+Further evidence such as authentication events, the originating account, destination-host task creation events, and parent-child process relationships would help confirm whether the activity represents actual remote lateral movement.
