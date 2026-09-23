@@ -1,0 +1,51 @@
+Lateral Movement – SMB Svcctl
+
+Since the case is related to svcctl, the investigation was started by searching with the keyword svcctl. It was observed that the IPC$ share was accessed.
+
+Image
+
+The following information was observed:
+
+SubjectUserSid: S-1-5-21-1363495622-3806888128-621328882-1104
+SubjectUserName: pgustavo
+ShareName: \\*\IPC$
+
+The investigation was continued by searching with the identified user ID and reviewing the related messages.
+
+1. Windows Filtering Platform Allowed a Connection
+
+The first message showed that the Windows Filtering Platform allowed a connection.
+
+Source: 172.18.39.5
+Destination: 172.18.39.6
+Destination Port: 445
+
+
+2. Special Privileges Assigned to New Logon
+
+The second message showed that special privileges were assigned to a new logon.
+
+
+3. Network Share Access
+
+The next message showed that a network share was accessed.
+
+
+4. Handle Requested for an Object
+
+The next message showed that a handle to an object was requested.
+
+Object Name: ServicesActive
+
+5. Account Successfully Logged In
+
+The next message showed that the account was successfully logged in.
+
+
+6. Attempt to Duplicate Handle
+
+An attempt to duplicate a handle was observed.
+
+Overall Activity
+
+The IPC$ share was accessed by the identified user. Special privileges were assigned to a new logon, after which an account-creation event was observed. A handle was then requested for the ServicesActive object, followed by a successful account logon and an attempt to duplicate a handle.
